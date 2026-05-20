@@ -50,3 +50,4 @@ ensure_user_owned "$HOME_DIR/.codex" "$HOME_DIR/.claude" "$HOME_DIR/.claude-stat
 echo "AI tooling installed:"
 echo "  codex: $(command -v codex || true)"
 echo "  claude: $(command -v claude || true)"
+echo "  gh: $(command -v gh || true)"
