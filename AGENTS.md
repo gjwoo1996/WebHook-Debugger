@@ -35,3 +35,11 @@ the user explicitly asks for only one language.
 
 Korean documentation under `docs/ko` must use Korean document file names. Keep
 English document file names under `docs/en`.
+
+## AI Workflow Notes
+
+Before performing a commit or helping the user prepare commits, read the
+relevant documents under `docs/ai`.
+
+For commit work, always read `docs/ai/en/commit-guidelines.md` first.
+Korean reference: `docs/ai/ko/커밋 작업 규칙.md`.

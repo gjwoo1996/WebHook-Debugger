@@ -42,3 +42,8 @@ The documentation is organized by language and topic.
 - [개발 컨벤션](<docs/ko/03-collaboration/개발 컨벤션.md>)
 - [브랜치 전략](<docs/ko/03-collaboration/브랜치 전략.md>)
 - [일정 계획](<docs/ko/03-collaboration/일정 계획.md>)
+
+### AI Workflow Notes
+
+- [Commit Guidelines](docs/ai/en/commit-guidelines.md)
+- [커밋 작업 규칙](<docs/ai/ko/커밋 작업 규칙.md>)
