@@ -1,0 +1,27 @@
+{
+  "name": "WebHook Debugger",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "mounts": [
+    "source=webhook-debugger-codex-${devcontainerId},target=/home/vscode/.codex,type=volume",
+    "source=webhook-debugger-claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=webhook-debugger-claude-state-${devcontainerId},target=/home/vscode/.claude-state,type=volume"
+  ],
+  "postCreateCommand": ".devcontainer/commands/post-create.sh",
+  "postStartCommand": ".devcontainer/commands/post-start.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "openai.chatgpt",
+        "anthropic.claude-code"
+      ]
+    }
+  }
+}
