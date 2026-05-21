@@ -3,6 +3,12 @@
 This document defines how AI agents should prepare commits in this repository.
 Read it before creating commits or helping the user plan commits.
 
+For commit work, use this English document as the source of truth. Do not read
+the Korean translation as part of the normal commit workflow.
+
+When adding or changing commit-related rules, update both this English source
+document and the Korean translation at `docs/ai/ko/커밋 작업 규칙.md`.
+
 ## Core Principles
 
 - Always inspect the changes before committing.

@@ -41,5 +41,8 @@ English document file names under `docs/en`.
 Before performing a commit or helping the user prepare commits, read the
 relevant documents under `docs/ai`.
 
-For commit work, always read `docs/ai/en/commit-guidelines.md` first.
-Korean reference: `docs/ai/ko/커밋 작업 규칙.md`.
+For commit work, read only the English source document:
+`docs/ai/en/commit-guidelines.md`.
+
+When adding or changing commit-related rules, update both the English source and
+its Korean translation: `docs/ai/ko/커밋 작업 규칙.md`.
