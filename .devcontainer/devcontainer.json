@@ -8,20 +8,33 @@
       "version": "lts"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+    // "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21"
+    }
   },
   "mounts": [
     "source=webhook-debugger-codex-${devcontainerId},target=/home/vscode/.codex,type=volume",
     "source=webhook-debugger-claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
     "source=webhook-debugger-claude-state-${devcontainerId},target=/home/vscode/.claude-state,type=volume"
   ],
-  "postCreateCommand": ".devcontainer/commands/post-create.sh",
-  "postStartCommand": ".devcontainer/commands/post-start.sh",
+  "postCreateCommand": "bash .devcontainer/commands/post-create.sh",
+  "postStartCommand": "bash .devcontainer/commands/post-start.sh",
   "customizations": {
     "vscode": {
       "extensions": [
         "openai.chatgpt",
-        "anthropic.claude-code"
+        "anthropic.claude-code",
+        // 공통
+        "github.vscode-github-actions",
+        "PKief.material-icon-theme",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "wayou.vscode-todo-highlight",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next",
       ]
     }
   }
