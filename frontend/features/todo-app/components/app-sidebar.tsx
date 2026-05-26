@@ -10,7 +10,7 @@ import {
   Flag,
   ShoppingCart,
 } from 'lucide-react'
-import { Input } from '@/shared/components/ui/input'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/shared/lib/utils'
 
 const navItems = [

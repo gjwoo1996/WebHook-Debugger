@@ -1,12 +1,12 @@
-import { Search, Settings, HelpCircle, Bell, User } from 'lucide-react'
+import { Search, Settings, HelpCircle, Bell, User, Grip } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
-export function TopBar() {
+export default function Header() {
   return (
-    <header className="flex h-12 w-full items-center justify-between bg-[#2564cf] px-4 text-white">
+    <header className="relative z-20 flex h-12 w-full items-center justify-between bg-[#2564cf] px-4 text-white">
       <div className="flex items-center gap-4">
         <button className="rounded p-1 hover:bg-white/10">
-          <Settings className="h-5 w-5" />
+          <Grip className="h-5 w-5" />
         </button>
         <span className="font-semibold">To Do</span>
       </div>
