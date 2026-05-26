@@ -173,6 +173,17 @@
       font-size: 26px;
     }
 
+    .title-group {
+      display: grid;
+      gap: 4px;
+    }
+
+    .remaining {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
     .view-switch,
     .calendar-switch,
     .archive-tabs {
@@ -316,6 +327,18 @@
       font-size: 20px;
     }
 
+    .detail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .detail-head h2 {
+      margin: 0;
+    }
+
     .field {
       margin-bottom: 13px;
     }
@@ -336,6 +359,38 @@
       background: #f9fbfd;
       color: #354052;
       font-size: 14px;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .choice-row .choice {
+      min-height: 32px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #4c5667;
+      background: #f9fbfd;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .choice-row .choice.active {
+      color: #1748bb;
+      border-color: #cddcff;
+      background: #eef4ff;
+    }
+
+    .detail-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
     }
 
     .preview-grid {
@@ -454,6 +509,14 @@
       font-weight: 800;
     }
 
+    .more-count {
+      display: block;
+      margin-top: 3px;
+      color: #66717f;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
     .board {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -483,6 +546,12 @@
       background: #fbfcfe;
       font-size: 13px;
       font-weight: 700;
+    }
+
+    .board-card .meta {
+      display: block;
+      margin-top: 4px;
+      font-weight: 600;
     }
 
     .archive {
@@ -613,7 +682,10 @@
 
       <section class="workspace">
         <div class="topbar">
-          <h2>오늘 할 일</h2>
+          <div class="title-group">
+            <h2>오늘 할 일</h2>
+            <span class="remaining">2개 남음</span>
+          </div>
           <div class="view-switch">
             <button class="active">☰ 리스트</button>
             <button>□ 캘린더</button>
@@ -660,26 +732,38 @@
 
     <div class="detail-wrap" aria-label="선택한 할 일 상세 패널 예시">
       <aside class="detail">
-        <h2>할 일 상세</h2>
+        <div class="detail-head">
+          <h2>할 일 상세</h2>
+          <button>더보기</button>
+        </div>
         <div class="field">
           <label>제목</label>
           <div>병원 예약 확인하기</div>
         </div>
         <div class="field">
           <label>날짜</label>
-          <div>오늘</div>
+          <div class="choice-row">
+            <span class="choice">날짜 없음</span>
+            <span class="choice active">오늘</span>
+            <span class="choice">내일</span>
+            <span class="choice">직접 선택</span>
+          </div>
         </div>
         <div class="field">
           <label>우선순위</label>
-          <div>높음</div>
+          <div class="choice-row">
+            <span class="choice">낮음</span>
+            <span class="choice">보통</span>
+            <span class="choice active">높음</span>
+          </div>
         </div>
         <div class="field">
           <label>목록</label>
-          <div>개인</div>
+          <div>개인 ▾</div>
         </div>
         <div class="field">
           <label>태그</label>
-          <div>#전화</div>
+          <div>#전화, 태그 검색 또는 추가</div>
         </div>
         <div class="field">
           <label>반복</label>
@@ -688,6 +772,10 @@
         <div class="field">
           <label>메모</label>
           <div>오전 중 전화해서 예약 시간을 다시 확인하기</div>
+        </div>
+        <div class="detail-actions">
+          <button>취소</button>
+          <button class="active">저장</button>
         </div>
       </aside>
     </div>
@@ -746,8 +834,8 @@
           </section>
           <section class="command-section">
             <p class="command-title">할 일 검색 결과 예시</p>
-            <div class="command-row">병원 예약 확인하기 <span>오늘</span></div>
-            <div class="command-row">회의 자료 정리 <span>업무</span></div>
+            <div class="command-row">병원 예약 확인하기 <span>오늘로 이동 + 상세 열기</span></div>
+            <div class="command-row">회의 자료 정리 <span>업무로 이동 + 상세 열기</span></div>
           </section>
         </div>
       </article>
@@ -764,7 +852,7 @@
             </div>
           </div>
           <div class="calendar-grid">
-            <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day has-task">5<br>회의</div><div class="day">6</div><div class="day">7</div>
+            <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day has-task">5<br>회의<span class="more-count">+2</span></div><div class="day">6</div><div class="day">7</div>
             <div class="day">8</div><div class="day has-task">9<br>병원</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day has-task">13<br>마감</div><div class="day">14</div>
             <div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div><div class="day">20</div><div class="day">21</div>
           </div>
@@ -777,16 +865,16 @@
         <div class="board">
           <div class="column">
             <h4>할 일</h4>
-            <div class="board-card">병원 예약 확인</div>
-            <div class="board-card">자료 조사</div>
+            <div class="board-card">병원 예약 확인<span class="meta">오늘 · 높음</span></div>
+            <div class="board-card">자료 조사<span class="meta">내일 · 보통</span></div>
           </div>
           <div class="column">
             <h4>진행 중</h4>
-            <div class="board-card">회의 자료 정리</div>
+            <div class="board-card">회의 자료 정리<span class="meta">오늘 · 보통</span></div>
           </div>
           <div class="column">
             <h4>완료</h4>
-            <div class="board-card">우유 사기</div>
+            <div class="board-card">우유 사기<span class="meta">오늘 · 낮음</span></div>
           </div>
         </div>
       </article>
