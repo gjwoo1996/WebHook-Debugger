@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TODO 애플리케이션 분석 원문 정리</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #20242c;
+      --muted: #687386;
+      --line: #dfe5ee;
+      --soft: #eef3f8;
+      --blue: #2f6df6;
+      --green: #17966a;
+      --yellow: #b77912;
+      --red: #d34b4b;
+      --shadow: 0 16px 44px rgba(23, 35, 53, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 26px 20px;
+      overflow: auto;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .brand {
+      margin-bottom: 24px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav-group {
+      margin: 18px 0;
+    }
+
+    .nav-group b {
+      display: block;
+      margin: 0 0 8px 8px;
+      color: #3d4655;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-group a {
+      display: block;
+      padding: 8px 10px;
+      color: var(--muted);
+      border-radius: 7px;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .nav-group a:hover,
+    .nav-group a:focus {
+      color: var(--ink);
+      background: var(--soft);
+      outline: none;
+    }
+
+    main {
+      padding: 42px min(6vw, 76px) 72px;
+    }
+
+    .hero {
+      max-width: 960px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(34px, 4.2vw, 58px);
+      line-height: 1.14;
+      letter-spacing: 0;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .note {
+      max-width: 960px;
+      margin: 0 0 34px;
+      padding: 18px 20px;
+      border: 1px solid #cfe0ff;
+      border-radius: 8px;
+      background: #f6f9ff;
+    }
+
+    .note strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .note p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    section {
+      max-width: 1120px;
+      margin-bottom: 54px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    h4 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .section-lead {
+      max-width: 840px;
+      margin: -2px 0 22px;
+      color: var(--muted);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 960px;
+      margin-bottom: 44px;
+    }
+
+    .summary-card,
+    .content-card,
+    .source-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card {
+      padding: 18px;
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .summary-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .product-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .product-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #384355;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill.blue { color: #1748bb; background: #eef4ff; border-color: #cddcff; }
+    .pill.green { color: #116847; background: #eaf8f2; border-color: #c3ead9; }
+    .pill.yellow { color: #7a520f; background: #fff5df; border-color: #f1d69b; }
+    .pill.red { color: #9a2f2f; background: #fff0f0; border-color: #f4caca; }
+
+    .content-card {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .source-card {
+      padding: 18px;
+      break-inside: avoid;
+    }
+
+    .source-card h4 {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .index-number {
+      display: inline-grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 7px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin: 6px 0;
+      color: #344052;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    li li {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .ux-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    details + details {
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 16px 18px;
+      font-weight: 800;
+    }
+
+    .details-body {
+      padding: 0 18px 18px;
+    }
+
+    .priority {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .priority li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .priority b {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border-radius: 7px;
+      color: #fff;
+      background: var(--blue);
+      font-size: 13px;
+    }
+
+    .meeting-guide {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .meeting-guide .source-card {
+      background: #fbfcfe;
+    }
+
+    .footer {
+      max-width: 1120px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1060px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      main {
+        padding: 30px 18px 54px;
+      }
+
+      .summary-grid,
+      .category-grid,
+      .meeting-guide {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      .source-card,
+      .content-card,
+      details {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="문서 내비게이션">
+      <div class="brand">
+        <strong>TODO 애플리케이션 분석</strong>
+        <span>Notion 원문을 회의하기 좋게 재정리한 HTML</span>
+      </div>
+
+      <nav>
+        <div class="nav-group">
+          <b>문서</b>
+          <a href="#overview">읽는 방법</a>
+          <a href="#meeting">회의 진행용 관점</a>
+        </div>
+        <div class="nav-group">
+          <b>TickTick</b>
+          <a href="#ticktick-features">기능 트리</a>
+          <a href="#ticktick-ux">UX 관점 부족점</a>
+          <a href="#ticktick-priority">개선 우선순위</a>
+        </div>
+        <div class="nav-group">
+          <b>Todoist</b>
+          <a href="#todoist-features">기능 트리</a>
+          <a href="#todoist-ux">UX 관점 부족점</a>
+          <a href="#todoist-priority">개선 우선순위</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero" id="overview">
+        <p class="eyebrow">Source-first document</p>
+        <h1>Notion 내용을 먼저 읽기 좋게 정리한 회의용 HTML</h1>
+        <p>
+          이 문서는 아직 기획 결론을 내리지 않습니다. TickTick과 Todoist 분석 내용을 기능 트리와 UX 관찰로 나누어,
+          이후 회의에서 “우리 프로젝트에 어떤 TODO 기능을 구현할지” 함께 판단하기 위한 자료입니다.
+        </p>
+      </header>
+
+      <div class="note">
+        <strong>현재 단계의 목표</strong>
+        <p>
+          해석과 결론을 최소화하고, Notion의 원문 구조를 보기 쉽게 재배치했습니다.
+          다음 단계에서 이 내용을 기준으로 MVP, 확장 기능, 후순위 기능을 함께 나누면 됩니다.
+        </p>
+      </div>
+
+      <div class="summary-grid" aria-label="문서 요약">
+        <div class="summary-card">
+          <strong>2</strong>
+          <span>분석 서비스</span>
+        </div>
+        <div class="summary-card">
+          <strong>20</strong>
+          <span>기능 트리 묶음</span>
+        </div>
+        <div class="summary-card">
+          <strong>24</strong>
+          <span>UX 검토 항목</span>
+        </div>
+        <div class="summary-card">
+          <strong>10</strong>
+          <span>개선 우선순위</span>
+        </div>
+      </div>
+
+      <section id="meeting">
+        <h2>회의 진행용 관점</h2>
+        <p class="section-lead">
+          아래 세 질문만 들고 읽으면 기획 회의가 훨씬 선명해집니다. 아직 답을 확정하지 않고,
+          원문을 보며 후보를 표시하는 용도입니다.
+        </p>
+        <div class="meeting-guide">
+          <article class="source-card">
+            <h3>1. 반드시 있어야 하는 기능은?</h3>
+            <p class="section-lead">할 일 생성, 완료, 날짜, 목록처럼 TODO 앱으로 인식되기 위한 최소 기능을 찾습니다.</p>
+          </article>
+          <article class="source-card">
+            <h3>2. 차별화에 도움 되는 기능은?</h3>
+            <p class="section-lead">자연어 입력, 캘린더, 보드, 반복 작업, 템플릿처럼 나중에 강점이 될 후보를 분리합니다.</p>
+          </article>
+          <article class="source-card">
+            <h3>3. 지금은 미뤄도 되는 기능은?</h3>
+            <p class="section-lead">협업, 위치 알림, 포모도로, 습관, 통계처럼 초기 범위를 키우는 기능을 가려냅니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="ticktick-features">
+        <div class="product-header">
+          <div>
+            <h2>TickTick 기능 트리</h2>
+            <p>Notion의 TickTick 섹션 중 “1. 기능 트리”를 기능 영역별로 정리했습니다.</p>
+          </div>
+          <div class="pill-row">
+            <span class="pill blue">TODO</span>
+            <span class="pill green">Calendar</span>
+            <span class="pill yellow">Habit</span>
+            <span class="pill">Pomodoro</span>
+          </div>
+        </div>
+
+        <div class="category-grid">
+          <article class="source-card">
+            <h4><span class="index-number">1.1</span> 할 일 생성</h4>
+            <ul>
+              <li>기본 작업 추가
+                <ul>
+                  <li>할 일 제목 입력</li>
+                  <li>설명/메모 입력</li>
+                  <li>빠른 추가 입력창 사용</li>
+                  <li>입력 후 즉시 목록에 등록</li>
+                </ul>
+              </li>
+              <li>자연어 입력
+                <ul>
+                  <li>오늘, 내일, 다음 주 같은 날짜 표현 입력</li>
+                  <li>특정 시간 입력</li>
+                  <li>반복 일정 입력</li>
+                  <li>입력 중 날짜/시간 자동 인식</li>
+                </ul>
+              </li>
+              <li>상세 정보 추가
+                <ul>
+                  <li>마감일, 마감 시간, 우선순위 설정</li>
+                  <li>태그, 리스트, 담당자 지정</li>
+                </ul>
+              </li>
+              <li>하위 작업 생성
+                <ul>
+                  <li>큰 작업을 작은 단위로 분해</li>
+                  <li>체크리스트 형태로 단계 관리</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.2</span> 날짜/일정 관리</h4>
+            <ul>
+              <li>날짜 설정
+                <ul>
+                  <li>오늘, 내일, 이번 주, 다음 주</li>
+                  <li>특정 날짜, 날짜 없음</li>
+                </ul>
+              </li>
+              <li>시간/기간 설정
+                <ul>
+                  <li>특정 시각, 하루 종일 작업</li>
+                  <li>시작 시간, 종료 시간</li>
+                  <li>일정처럼 캘린더에 배치</li>
+                </ul>
+              </li>
+              <li>반복 작업 설정
+                <ul>
+                  <li>매일, 매주, 매월, 매년</li>
+                  <li>사용자 지정 반복</li>
+                  <li>완료일 기준 반복</li>
+                </ul>
+              </li>
+              <li>캘린더 보기
+                <ul>
+                  <li>할 일을 날짜 기반으로 확인</li>
+                  <li>일정과 할 일을 함께 확인</li>
+                  <li>드래그 앤 드롭으로 일정 재배치</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.3</span> 리스트/프로젝트 구조화</h4>
+            <ul>
+              <li>리스트 생성
+                <ul>
+                  <li>개인, 업무, 쇼핑, 공부, 사이드 프로젝트 리스트</li>
+                </ul>
+              </li>
+              <li>리스트별 작업 관리
+                <ul>
+                  <li>관련 작업을 한 공간에 모음</li>
+                  <li>리스트 단위로 작업 확인</li>
+                  <li>리스트 단위로 공유 가능</li>
+                </ul>
+              </li>
+              <li>폴더 구조
+                <ul>
+                  <li>여러 리스트를 상위 폴더로 묶음</li>
+                  <li>개인/업무/학습/사이드 프로젝트 구분</li>
+                </ul>
+              </li>
+              <li>작업 순서 정리
+                <ul>
+                  <li>드래그 앤 드롭으로 순서 변경</li>
+                  <li>중요 작업 상단 배치</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.4</span> 보기 방식</h4>
+            <ul>
+              <li>리스트 보기
+                <ul>
+                  <li>작업을 위에서 아래로 확인</li>
+                  <li>단순한 할 일 처리에 적합</li>
+                </ul>
+              </li>
+              <li>캘린더 보기
+                <ul>
+                  <li>날짜 기반으로 작업 확인</li>
+                  <li>시간대별 계획 수립 가능</li>
+                </ul>
+              </li>
+              <li>칸반/보드형 보기
+                <ul>
+                  <li>단계별 작업 상태 파악</li>
+                  <li>진행 흐름이 있는 프로젝트에 적합</li>
+                </ul>
+              </li>
+              <li>Today 보기와 Next 7 Days 보기
+                <ul>
+                  <li>오늘 해야 할 일 집중</li>
+                  <li>앞으로 일주일 작업 확인</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.5</span> 분류/탐색</h4>
+            <ul>
+              <li>태그
+                <ul>
+                  <li>작업에 맥락 부여</li>
+                  <li>리스트와 상관없이 작업을 묶음</li>
+                  <li>예: 회의, 외부, 집중, 확인 필요</li>
+                </ul>
+              </li>
+              <li>스마트 리스트/필터
+                <ul>
+                  <li>날짜, 태그, 우선순위, 리스트, 완료 여부 기준 필터</li>
+                </ul>
+              </li>
+              <li>검색
+                <ul>
+                  <li>작업명, 메모, 태그, 완료된 작업 검색</li>
+                </ul>
+              </li>
+              <li>즐겨찾기/고정
+                <ul>
+                  <li>자주 쓰는 리스트, 태그, 보기 방식 빠르게 접근</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.6</span> 우선순위/실행 관리</h4>
+            <ul>
+              <li>우선순위 설정
+                <ul>
+                  <li>높음, 중간, 낮음, 없음</li>
+                </ul>
+              </li>
+              <li>우선순위 시각 표시
+                <ul>
+                  <li>색상 또는 아이콘으로 중요도 구분</li>
+                </ul>
+              </li>
+              <li>작업 완료
+                <ul>
+                  <li>체크박스로 완료 처리</li>
+                  <li>하위 작업 개별 완료</li>
+                  <li>반복 작업의 이번 회차 완료</li>
+                </ul>
+              </li>
+              <li>미완료 작업 조정
+                <ul>
+                  <li>날짜 변경, 우선순위 변경, 리스트 이동, 삭제 또는 보류</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.7</span> 협업 기능</h4>
+            <ul>
+              <li>리스트 공유
+                <ul>
+                  <li>가족, 팀원, 프로젝트 멤버와 공유</li>
+                </ul>
+              </li>
+              <li>작업 할당
+                <ul>
+                  <li>담당자 지정</li>
+                  <li>공유 리스트 내 역할 분배</li>
+                </ul>
+              </li>
+              <li>댓글/활동 기록
+                <ul>
+                  <li>작업별 코멘트 작성</li>
+                  <li>진행 상황 공유, 변경 내역 확인</li>
+                </ul>
+              </li>
+              <li>협업 알림
+                <ul>
+                  <li>담당 작업, 댓글, 공유 리스트 변경 알림</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.8</span> 알림/리마인더</h4>
+            <ul>
+              <li>시간 기반 알림
+                <ul>
+                  <li>특정 시간, 마감 전, 반복 작업 알림</li>
+                </ul>
+              </li>
+              <li>다중 알림
+                <ul>
+                  <li>사전 알림, 마감 시간 알림, 반복 알림</li>
+                </ul>
+              </li>
+              <li>위치 기반 알림
+                <ul>
+                  <li>특정 장소 도착 또는 이탈 시 알림</li>
+                </ul>
+              </li>
+              <li>알림 채널과 역할
+                <ul>
+                  <li>앱, 기기별, 이메일 알림 가능성</li>
+                  <li>작업 망각 방지, 앱 재방문 유도, 마감 기반 실행 강화</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.9</span> 템플릿/자동화</h4>
+            <ul>
+              <li>템플릿 사용
+                <ul>
+                  <li>반복적으로 쓰는 리스트 구조 재사용</li>
+                  <li>개인 생산성, 업무 관리, 학습/생활 관리 템플릿</li>
+                </ul>
+              </li>
+              <li>반복 업무 자동화
+                <ul>
+                  <li>반복 할 일 생성</li>
+                  <li>정기 루틴 자동 생성</li>
+                  <li>완료 기준 반복 설정</li>
+                </ul>
+              </li>
+              <li>실행 보조 기능
+                <ul>
+                  <li>포모도로 타이머</li>
+                  <li>집중 시간 기록과 세션 통계</li>
+                </ul>
+              </li>
+              <li>외부 연동
+                <ul>
+                  <li>캘린더, 이메일, 브라우저 확장, 여러 기기 동기화</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.10</span> 개인화/설정</h4>
+            <ul>
+              <li>테마 설정
+                <ul>
+                  <li>라이트 모드, 다크 모드, 색상 테마, 보기 방식 조정</li>
+                </ul>
+              </li>
+              <li>알림 설정
+                <ul>
+                  <li>기본 알림 시간, 반복 알림 방식, 기기별 알림</li>
+                </ul>
+              </li>
+              <li>작업 기본값
+                <ul>
+                  <li>기본 리스트, 기본 날짜, 기본 우선순위, 기본 알림</li>
+                </ul>
+              </li>
+              <li>계정/플랜과 생산성 보조 설정
+                <ul>
+                  <li>무료/유료 플랜, 프리미엄 기능</li>
+                  <li>습관 추적, 포모도로, 통계 확인 방식</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="ticktick-ux">
+        <h2>TickTick UX 관점에서 부족한 부분</h2>
+        <p class="section-lead">Notion의 TickTick 섹션 중 “2. UX 관점에서 부족한 부분”을 접이식 항목으로 정리했습니다.</p>
+        <div class="ux-list">
+          <details open>
+            <summary>2.1 첫 진입 경험</summary>
+            <div class="details-body">
+              <ul>
+                <li>핵심 타깃 사용자가 개인, 팀, 학생, 직장인, 프리랜서 중 누구인지 더 명확해야 함</li>
+                <li>단순 TODO 앱과의 차별점이 첫 화면에서 즉시 드러나야 함</li>
+                <li>개선 방향: “할 일 수집 → 일정화 → 실행 → 회고” 흐름, 사용자 유형별 사례, 샘플 화면 제공</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.2 기능 발견성</summary>
+            <div class="details-body">
+              <ul>
+                <li>스마트 리스트, 고급 반복, 매트릭스, 캘린더 구독, 포모도로, 습관 추적, 통계가 숨어 있을 가능성</li>
+                <li>기능을 모르면 단순 TODO 앱처럼만 사용할 수 있음</li>
+                <li>개선 방향: 상황 기반 추천, 빈 화면 안내, 반복 행동 감지 시 자동화 제안</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.3 리스트/태그/스마트 리스트의 개념 구분</summary>
+            <div class="details-body">
+              <ul>
+                <li>리스트, 폴더, 태그, 스마트 리스트의 역할 차이를 초보자가 이해하기 어려움</li>
+                <li>분류 체계를 잘못 만들면 나중에 정리가 어려워짐</li>
+                <li>개선 방향: 첫 리스트 생성 시 가이드, 예시 기반 설명, 추천 구조 제공</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.4 날짜 기반 사용 흐름의 압박감</summary>
+            <div class="details-body">
+              <ul>
+                <li>Today 중심 구조는 집중에 유리하지만 작업이 많아지면 압박감이 커짐</li>
+                <li>미완료 작업 누적과 과도한 알림이 피로를 만들 수 있음</li>
+                <li>개선 방향: Today 작업 자동 정리 제안, 미완료 작업 재배치, 심리적 완충 UX</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.5 보기 방식의 전환 맥락</summary>
+            <div class="details-body">
+              <ul>
+                <li>리스트, 캘린더, 보드, 매트릭스는 서로 다른 사고방식을 요구함</li>
+                <li>어떤 상황에 어떤 보기를 써야 하는지 모를 수 있음</li>
+                <li>개선 방향: 목적별 추천 보기, 보기 전환 안내, 초보자는 기본 리스트/Today 중심으로 시작</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.6 협업 기능의 포지셔닝</summary>
+            <div class="details-body">
+              <ul>
+                <li>개인 생산성 앱 인식이 강하고, 팀 협업에서는 권한/리포트/의존성 관리가 부족해 보일 수 있음</li>
+                <li>개선 방향: 개인용/팀용 사례 분리, 가족/소규모 팀 중심 포지셔닝, 경쟁 도구와 차이 설명</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.7 무료/유료 기능 경계</summary>
+            <div class="details-body">
+              <ul>
+                <li>캘린더, 습관, 포모도로, 고급 필터, 반복 알림, 협업의 무료/유료 경계가 중요함</li>
+                <li>사용하려는 순간 유료 제한을 만나면 실망 가능</li>
+                <li>개선 방향: 기능 설정 화면에서 사전 표시, 가격 페이지 비교표 강화, 무료 대안 제시</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.8 알림 피로도</summary>
+            <div class="details-body">
+              <ul>
+                <li>마감일, 반복 작업, 습관, 팀 댓글, 여러 기기 동기화에서 알림이 많아질 수 있음</li>
+                <li>중요한 알림과 덜 중요한 알림이 섞이면 무시하게 됨</li>
+                <li>개선 방향: 알림 우선순위, 조용한 시간대, 중요 작업만 알림, 알림 빈도 추천</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.9 빈 상태 화면</summary>
+            <div class="details-body">
+              <ul>
+                <li>Inbox, Today, 리스트, 태그, 습관, 검색 결과가 비어 있을 수 있음</li>
+                <li>개선 방향: 단순한 빈 화면 대신 다음 행동, 예시 작업, 템플릿, 기능 설명 연결 제공</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.10 접근성</summary>
+            <div class="details-body">
+              <ul>
+                <li>우선순위를 색상만으로 구분하면 한계가 있음</li>
+                <li>빠른 추가, 날짜 변경, 완료 처리 단축키 안내가 중요함</li>
+                <li>정보 밀도 조절 옵션도 필요함</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.11 차별점 표현</summary>
+            <div class="details-body">
+              <ul>
+                <li>Todoist, Microsoft To Do, Google Tasks, Notion, Asana/Trello와 비교됨</li>
+                <li>TickTick 강점: TODO + Calendar + Habit + Pomodoro + Matrix 통합, 계획/실행/회고 결합</li>
+                <li>개선 방향: “계획·실행·회고를 하나로 통합” 메시지, 비교표, 사용자 유형별 추천 사용법</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="ticktick-priority">
+        <h2>TickTick 개선 우선순위</h2>
+        <ol class="priority">
+          <li><b>1</b><span>첫 진입 메시지와 CTA 명확화</span></li>
+          <li><b>2</b><span>리스트, 태그, 스마트 리스트 개념 구분 강화</span></li>
+          <li><b>3</b><span>고급 기능 발견성 개선</span></li>
+          <li><b>4</b><span>무료/유료 기능 경계 명확화</span></li>
+          <li><b>5</b><span>Today 과부하와 알림 피로도 완화</span></li>
+        </ol>
+      </section>
+
+      <section id="todoist-features">
+        <div class="product-header">
+          <div>
+            <h2>Todoist 기능 트리</h2>
+            <p>Notion의 Todoist 섹션 중 “1. 기능 트리”를 기능 영역별로 정리했습니다.</p>
+          </div>
+          <div class="pill-row">
+            <span class="pill blue">Quick Add</span>
+            <span class="pill green">Projects</span>
+            <span class="pill yellow">Filters</span>
+            <span class="pill">Board</span>
+          </div>
+        </div>
+
+        <div class="category-grid">
+          <article class="source-card">
+            <h4><span class="index-number">1.1</span> 할 일 생성</h4>
+            <ul>
+              <li>기본 작업 추가
+                <ul>
+                  <li>작업명 입력, 설명 입력, 빠른 추가 입력창 사용, Enter 기반 빠른 등록</li>
+                </ul>
+              </li>
+              <li>자연어 입력
+                <ul>
+                  <li>오늘, 내일, 다음 주, 특정 시간, 반복 일정, 입력 중 날짜/시간 자동 인식</li>
+                </ul>
+              </li>
+              <li>상세 정보 추가
+                <ul>
+                  <li>마감일, 마감 시간, 우선순위, 라벨, 프로젝트, 섹션, 담당자 지정</li>
+                </ul>
+              </li>
+              <li>하위 작업 생성
+                <ul>
+                  <li>큰 작업을 작은 단위로 분해하고 단계별 체크 가능</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.2</span> 날짜/일정 관리</h4>
+            <ul>
+              <li>날짜 설정
+                <ul>
+                  <li>오늘, 내일, 이번 주, 다음 주, 특정 날짜, 날짜 없음</li>
+                </ul>
+              </li>
+              <li>반복 작업 설정
+                <ul>
+                  <li>매일, 매주, 매월, 매년, 사용자 지정 반복</li>
+                </ul>
+              </li>
+              <li>예정 화면
+                <ul>
+                  <li>오늘 해야 할 일, 앞으로 예정된 작업, 날짜별 작업 흐름 파악</li>
+                </ul>
+              </li>
+              <li>캘린더 보기
+                <ul>
+                  <li>작업을 날짜 기반으로 확인하고 일정처럼 배치</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.3</span> 프로젝트 구조화</h4>
+            <ul>
+              <li>프로젝트 생성
+                <ul>
+                  <li>개인, 업무, 공부, 사이드 프로젝트, 팀 프로젝트</li>
+                </ul>
+              </li>
+              <li>프로젝트별 작업 관리
+                <ul>
+                  <li>관련 작업을 한 공간에 모으고 프로젝트별 진행 상황 파악</li>
+                </ul>
+              </li>
+              <li>섹션 생성
+                <ul>
+                  <li>할 일/진행 중/완료, 기획/디자인/개발/배포 등 단계 구분</li>
+                </ul>
+              </li>
+              <li>작업 순서 정리
+                <ul>
+                  <li>드래그 앤 드롭, 중요한 작업 상단 배치, 실행 순서 기준 정리</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.4</span> 보기 방식</h4>
+            <ul>
+              <li>리스트 보기
+                <ul>
+                  <li>단순한 할 일 관리, 빠른 입력과 체크에 유리</li>
+                </ul>
+              </li>
+              <li>보드 보기
+                <ul>
+                  <li>칸반 형태로 작업 확인, 섹션별 작업 상태 파악</li>
+                </ul>
+              </li>
+              <li>캘린더 보기
+                <ul>
+                  <li>날짜 기반 작업 확인, 일정 계획에 적합</li>
+                </ul>
+              </li>
+              <li>Today / Upcoming 보기
+                <ul>
+                  <li>오늘 해야 할 일과 앞으로 예정된 작업 확인</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.5</span> 분류/탐색</h4>
+            <ul>
+              <li>라벨
+                <ul>
+                  <li>작업에 맥락 부여, 프로젝트와 상관없이 작업 묶음</li>
+                </ul>
+              </li>
+              <li>필터
+                <ul>
+                  <li>날짜, 라벨, 우선순위, 담당자 기준 조건 목록 생성</li>
+                </ul>
+              </li>
+              <li>검색
+                <ul>
+                  <li>작업명, 설명, 완료된 작업 검색</li>
+                </ul>
+              </li>
+              <li>즐겨찾기
+                <ul>
+                  <li>자주 쓰는 프로젝트와 필터 고정</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.6</span> 우선순위/실행 관리</h4>
+            <ul>
+              <li>우선순위 설정
+                <ul>
+                  <li>P1, P2, P3, P4</li>
+                </ul>
+              </li>
+              <li>우선순위 시각 표시
+                <ul>
+                  <li>색상으로 중요도 구분</li>
+                </ul>
+              </li>
+              <li>작업 완료
+                <ul>
+                  <li>체크박스로 완료 처리, 완료된 작업 숨김, 완료 기록 확인</li>
+                </ul>
+              </li>
+              <li>미완료 작업 조정
+                <ul>
+                  <li>날짜 변경, 우선순위 변경, 프로젝트 이동, 삭제 또는 보류</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.7</span> 협업 기능</h4>
+            <ul>
+              <li>프로젝트 공유
+                <ul>
+                  <li>다른 사용자 초대, 공동 작업 공간 생성, 팀/가족/소규모 프로젝트 관리</li>
+                </ul>
+              </li>
+              <li>작업 할당
+                <ul>
+                  <li>담당자 지정, 팀 작업 분배</li>
+                </ul>
+              </li>
+              <li>댓글
+                <ul>
+                  <li>작업별 커뮤니케이션, 진행 상황 공유, 작업 맥락 유지</li>
+                </ul>
+              </li>
+              <li>알림
+                <ul>
+                  <li>담당 작업 변경, 댓글, 마감 관련 알림</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.8</span> 알림/리마인더</h4>
+            <ul>
+              <li>시간 기반 리마인더
+                <ul>
+                  <li>특정 시간, 마감 전, 반복 작업 알림</li>
+                </ul>
+              </li>
+              <li>위치 기반 리마인더
+                <ul>
+                  <li>특정 장소 도착 또는 이탈 시 알림</li>
+                </ul>
+              </li>
+              <li>알림 채널
+                <ul>
+                  <li>앱 알림, 이메일 알림, 기기별 알림</li>
+                </ul>
+              </li>
+              <li>알림의 역할
+                <ul>
+                  <li>작업 망각 방지, 앱 재방문 유도, 마감 기반 실행 강화</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.9</span> 템플릿/자동화</h4>
+            <ul>
+              <li>템플릿 사용
+                <ul>
+                  <li>반복 프로젝트 구조, 개인 생산성, 업무 관리, 교육/학습 템플릿</li>
+                </ul>
+              </li>
+              <li>프로젝트 템플릿 생성
+                <ul>
+                  <li>기존 프로젝트 구조 저장, 동일한 업무 프로세스 재사용</li>
+                </ul>
+              </li>
+              <li>외부 연동
+                <ul>
+                  <li>캘린더, 이메일, 자동화 도구, 다른 생산성 도구와 연결</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <article class="source-card">
+            <h4><span class="index-number">1.10</span> 개인화/설정</h4>
+            <ul>
+              <li>테마 설정
+                <ul>
+                  <li>라이트 모드, 다크 모드, 색상 테마</li>
+                </ul>
+              </li>
+              <li>알림 설정
+                <ul>
+                  <li>기본 알림 방식, 이메일 알림, 푸시 알림</li>
+                </ul>
+              </li>
+              <li>계정/플랜 관리
+                <ul>
+                  <li>무료 플랜, 유료 플랜, 팀 플랜</li>
+                </ul>
+              </li>
+              <li>사용 환경 설정
+                <ul>
+                  <li>언어 설정, 시간대 설정, 시작 화면 설정</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="todoist-ux">
+        <h2>Todoist UX 관점에서 부족한 부분</h2>
+        <p class="section-lead">Notion의 Todoist 섹션 중 “2. UX 관점에서 부족한 부분”을 접이식 항목으로 정리했습니다.</p>
+        <div class="ux-list">
+          <details open>
+            <summary>2.1 첫 진입 경험</summary>
+            <div class="details-body">
+              <ul>
+                <li>로그인/가입 전 제품 이해가 제한될 수 있음</li>
+                <li>실제 앱 진입 URL에서는 계정 생성이 기능 탐색보다 먼저 노출될 수 있음</li>
+                <li>개선 방향: 로그인 전 샘플 워크스페이스, 대표 사용 흐름, 체험하기 또는 샘플 프로젝트 보기</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.2 기능 발견성</summary>
+            <div class="details-body">
+              <ul>
+                <li>필터, 라벨, 보드 보기, 템플릿, 반복 날짜 자연어 입력, 위치 기반 리마인더가 숨어 있을 수 있음</li>
+                <li>초보자는 단순 체크리스트 앱처럼만 사용할 수 있음</li>
+                <li>개선 방향: 빈 화면 기능 추천, 사용 패턴 기반 제안, 빠른 추가 입력창의 자연어 예시</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.3 프로젝트/섹션/라벨/필터의 개념 구분</summary>
+            <div class="details-body">
+              <ul>
+                <li>프로젝트, 섹션, 라벨, 필터의 역할 차이가 헷갈릴 수 있음</li>
+                <li>필터는 강력하지만 설정 진입 장벽이 높을 수 있음</li>
+                <li>개선 방향: 첫 프로젝트 생성 시 가이드, 라벨과 필터 예시, 추천 구조 제공</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.4 날짜 기반 사용 흐름의 압박감</summary>
+            <div class="details-body">
+              <ul>
+                <li>Today 중심 구조는 집중에 유리하지만 작업이 많아지면 압박감이 커짐</li>
+                <li>일정 관리보다 마감 관리처럼 느껴질 수 있음</li>
+                <li>개선 방향: Today 작업 자동 정리, 미완료 작업 재배치, 심리적 완충 UX</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.5 보드 보기와 리스트 보기의 전환 맥락</summary>
+            <div class="details-body">
+              <ul>
+                <li>사용자가 어떤 보기 방식을 선택해야 할지 모를 수 있음</li>
+                <li>보드 보기는 프로젝트 관리 도구처럼 보여 사용 기대가 달라질 수 있음</li>
+                <li>개선 방향: 프로젝트 생성 시 추천 보기, 목적별 보기 예시, 전환 시 데이터 구조 설명</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.6 협업 기능의 포지셔닝</summary>
+            <div class="details-body">
+              <ul>
+                <li>개인 생산성 앱 인식이 강하고 팀 기능은 보조 기능처럼 느껴질 수 있음</li>
+                <li>팀 협업에서는 권한, 리포트, 일정 의존성, 대규모 워크플로우가 부족해 보일 수 있음</li>
+                <li>개선 방향: 개인용/팀용 사례 분리, 소규모 팀 협업 포지션 명확화</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.7 무료/유료 기능 경계</summary>
+            <div class="details-body">
+              <ul>
+                <li>리마인더, 캘린더 보기, 필터, 협업, 템플릿의 무료/유료 경계가 중요함</li>
+                <li>사용하려는 순간 제한을 만나면 실망 가능</li>
+                <li>개선 방향: 기능 설정 화면에서 사전 표시, 기능 맥락 안의 업그레이드 안내, 무료 대안 제시</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.8 알림 피로도</summary>
+            <div class="details-body">
+              <ul>
+                <li>마감일, 반복 작업, 팀 댓글, 여러 기기 동기화에서 알림이 많아질 수 있음</li>
+                <li>작업 관리 앱이 스트레스 요인이 될 수 있음</li>
+                <li>개선 방향: 알림 우선순위, 조용한 시간대, 중요 작업만 알림</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.9 빈 상태 화면</summary>
+            <div class="details-body">
+              <ul>
+                <li>Inbox, Today, 프로젝트, 라벨, 필터 결과가 비어 있을 수 있음</li>
+                <li>개선 방향: 다음 행동 제안, 예시 작업, 템플릿 추천, 기능 설명 연결</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.10 접근성</summary>
+            <div class="details-body">
+              <ul>
+                <li>우선순위 색상만으로 중요도를 구분하면 한계가 있음</li>
+                <li>빠른 추가, 날짜 변경, 완료 처리 단축키 안내가 중요함</li>
+                <li>화면 밀도 조절 옵션이 명확해야 함</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>2.11 차별점 표현</summary>
+            <div class="details-body">
+              <ul>
+                <li>TickTick, Microsoft To Do, Google Tasks, Notion, Asana/Trello와 비교됨</li>
+                <li>왜 Todoist를 선택해야 하는지 명확한 비교가 필요함</li>
+                <li>개선 방향: 빠른 입력 + 자연어 날짜 + 프로젝트 구조화 강점 강조, 사용자 유형별 사용법, 비교표</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="todoist-priority">
+        <h2>Todoist 개선 우선순위</h2>
+        <ol class="priority">
+          <li><b>1</b><span>로그인 전 제품 체험/미리보기 강화</span></li>
+          <li><b>2</b><span>프로젝트, 라벨, 필터 개념 구분 강화</span></li>
+          <li><b>3</b><span>고급 기능 발견성 개선</span></li>
+          <li><b>4</b><span>무료/유료 기능 경계 명확화</span></li>
+          <li><b>5</b><span>Today 과부하와 알림 피로도 완화</span></li>
+        </ol>
+      </section>
+
+      <footer class="footer">
+        Source: Notion “TODO 어플리케이션 분석”. 이 HTML은 기획 결론이 아니라,
+        이후 회의에서 기능 후보를 함께 분류하기 위한 원문 정리본입니다.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

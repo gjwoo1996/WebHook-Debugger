@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TODO Screen Structure Preview</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --panel: #ffffff;
+      --line: #dfe5ee;
+      --ink: #222833;
+      --muted: #6d7787;
+      --soft: #f0f4f9;
+      --blue: #2f6df6;
+      --green: #1d9a6c;
+      --yellow: #b87b12;
+      --red: #d64f4f;
+      --shadow: 0 18px 42px rgba(27, 39, 58, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    header {
+      padding: 34px 42px 22px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 820px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      word-break: keep-all;
+    }
+
+    main {
+      padding: 28px 42px 60px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .preview-app {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      min-height: 680px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      padding: 18px 14px;
+      border-right: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .brand {
+      padding: 0 10px 18px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .nav-block {
+      margin-bottom: 20px;
+    }
+
+    .nav-label {
+      margin: 0 10px 8px;
+      color: #8490a0;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nav-item,
+    .sub-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 36px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #3d4655;
+      font-size: 14px;
+    }
+
+    .nav-item.active {
+      color: #1748bb;
+      background: #eef4ff;
+      font-weight: 800;
+    }
+
+    .search-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 16px;
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 8px;
+      color: #354052;
+      background: #eef4ff;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .search-button .count {
+      color: #5d6f96;
+      font-weight: 700;
+    }
+
+    .sub-item {
+      min-height: 30px;
+      margin-left: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .count {
+      color: #8a95a5;
+      font-size: 12px;
+    }
+
+    .workspace {
+      padding: 24px 28px;
+      background: #f8fafc;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .view-switch,
+    .calendar-switch,
+    .archive-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 8px 11px;
+      color: #596475;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    button.active {
+      color: #ffffff;
+      background: var(--blue);
+    }
+
+    .task-list,
+    .calendar,
+    .board,
+    .archive,
+    .empty-state,
+    .login-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #edf1f6;
+    }
+
+    .task:last-child {
+      border-bottom: 0;
+    }
+
+    .check {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #aab4c3;
+      border-radius: 50%;
+    }
+
+    .task.done {
+      opacity: 0.55;
+    }
+
+    .task.done .check {
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #4c5667;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .badge.high {
+      color: #9a2f2f;
+      background: #fff0f0;
+    }
+
+    .quick-add {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 15px 16px;
+      border: 1px dashed #b7c2d1;
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .quick-add span:first-child {
+      flex: 1;
+    }
+
+    .quick-chip {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #596475;
+      background: #f8fafc;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .detail {
+      width: 320px;
+      padding: 22px 18px;
+      border-left: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: -14px 0 28px rgba(27, 39, 58, 0.06);
+    }
+
+    .detail-wrap {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: stretch;
+      pointer-events: none;
+    }
+
+    .detail-wrap .detail {
+      pointer-events: auto;
+    }
+
+    .detail h2 {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .field {
+      margin-bottom: 13px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: #8490a0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .field div {
+      min-height: 38px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f9fbfd;
+      color: #354052;
+      font-size: 14px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .preview-app-shell {
+      position: relative;
+    }
+
+    .search-modal {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .search-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .key {
+      margin-left: auto;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: #f0f2f5;
+      color: #5f6876;
+      font-size: 12px;
+    }
+
+    .command-section {
+      padding: 12px 0;
+      border-bottom: 1px solid #edf1f6;
+    }
+
+    .command-section:last-child {
+      border-bottom: 0;
+    }
+
+    .command-title {
+      margin: 0 16px 8px;
+      color: #8490a0;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .command-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      color: #3d4655;
+      font-size: 14px;
+    }
+
+    .command-row span:last-child {
+      margin-left: auto;
+      color: #8a95a5;
+      font-size: 12px;
+    }
+
+    .mini {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .mini h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .mini-note {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .calendar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .day {
+      min-height: 58px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfcfe;
+      font-size: 12px;
+    }
+
+    .day.has-task {
+      border-color: #c9d8ff;
+      background: #f3f7ff;
+      color: #1748bb;
+      font-weight: 800;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .column {
+      min-height: 190px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .column h4 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .board-card {
+      margin-bottom: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfcfe;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .archive {
+      padding: 14px;
+    }
+
+    .archive-tabs {
+      margin-bottom: 12px;
+    }
+
+    .archive-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf1f6;
+      font-size: 14px;
+    }
+
+    .archive-row:last-child {
+      border-bottom: 0;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .templates {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .login-wrap {
+      display: grid;
+      place-items: center;
+      min-height: 340px;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .login-card {
+      width: min(380px, 100%);
+      padding: 24px;
+    }
+
+    .login-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .login-field {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 12px;
+      color: #ffffff;
+      background: var(--blue);
+    }
+
+    @media (max-width: 1160px) {
+      .preview-app {
+        grid-template-columns: 200px minmax(0, 1fr);
+      }
+
+      .detail {
+        display: none;
+      }
+
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Screen structure preview</p>
+    <h1>TODO 앱 화면 구성 1차 결과</h1>
+    <p>
+      지금까지 회의에서 합의한 웹 화면 구조를 한눈에 보기 위한 HTML입니다.
+      최종 디자인이 아니라 레이아웃과 정보 배치 확인용입니다.
+    </p>
+  </header>
+
+  <main>
+    <h2 class="section-title">메인 화면: 오늘 중심 + 접이식 사이드바 + 오른쪽 상세 패널</h2>
+    <div class="preview-app-shell">
+    <section class="preview-app" aria-label="메인 화면 구성">
+      <aside class="sidebar">
+        <div class="brand">Simple TODO</div>
+        <button class="search-button" type="button">
+          <span>⌕ 검색</span>
+          <span class="count">Ctrl K</span>
+        </button>
+        <section class="nav-block">
+          <p class="nav-label">바로 보기</p>
+          <div class="nav-item active"><span>오늘</span><span class="count">3</span></div>
+          <div class="nav-item"><span>예정</span><span class="count">8</span></div>
+          <div class="nav-item"><span>전체</span><span class="count">18</span></div>
+        </section>
+
+        <section class="nav-block">
+          <p class="nav-label">정리</p>
+          <div class="nav-item"><span>▾ 목록</span><span class="count">3</span></div>
+          <div class="sub-item"><span>개인</span><span class="count">6</span></div>
+          <div class="sub-item"><span>업무</span><span class="count">9</span></div>
+          <div class="sub-item"><span>장보기</span><span class="count">3</span></div>
+          <div class="nav-item"><span>▾ 태그</span><span class="count">2</span></div>
+          <div class="sub-item"><span>#전화</span><span class="count">2</span></div>
+          <div class="sub-item"><span>#외출</span><span class="count">4</span></div>
+        </section>
+
+        <section class="nav-block">
+          <p class="nav-label">더보기</p>
+          <div class="nav-item"><span>보관</span><span class="count">13</span></div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <div class="topbar">
+          <h2>오늘 할 일</h2>
+          <div class="view-switch">
+            <button class="active">☰ 리스트</button>
+            <button>□ 캘린더</button>
+            <button>▦ 보드</button>
+          </div>
+        </div>
+
+        <div class="task-list">
+          <div class="task">
+            <div class="check"></div>
+            <div>
+              <strong>병원 예약 확인하기</strong>
+              <div class="meta">오늘</div>
+            </div>
+            <span class="badge high">높음</span>
+          </div>
+          <div class="task">
+            <div class="check"></div>
+            <div>
+              <strong>회의 자료 정리</strong>
+              <div class="meta">오늘</div>
+            </div>
+            <span class="badge">보통</span>
+          </div>
+          <div class="task done">
+            <div class="check"></div>
+            <div>
+              <strong>우유 사기</strong>
+              <div class="meta">오늘 완료</div>
+            </div>
+            <span class="badge">완료</span>
+          </div>
+        </div>
+
+        <div class="quick-add">
+          <span>+ 할 일 입력하기</span>
+          <span class="quick-chip">오늘</span>
+          <span class="quick-chip">보통</span>
+          <span class="quick-chip">추가</span>
+        </div>
+      </section>
+
+    </section>
+
+    <div class="detail-wrap" aria-label="선택한 할 일 상세 패널 예시">
+      <aside class="detail">
+        <h2>할 일 상세</h2>
+        <div class="field">
+          <label>제목</label>
+          <div>병원 예약 확인하기</div>
+        </div>
+        <div class="field">
+          <label>날짜</label>
+          <div>오늘</div>
+        </div>
+        <div class="field">
+          <label>우선순위</label>
+          <div>높음</div>
+        </div>
+        <div class="field">
+          <label>목록</label>
+          <div>개인</div>
+        </div>
+        <div class="field">
+          <label>태그</label>
+          <div>#전화</div>
+        </div>
+        <div class="field">
+          <label>반복</label>
+          <div>반복 안 함</div>
+        </div>
+        <div class="field">
+          <label>메모</label>
+          <div>오전 중 전화해서 예약 시간을 다시 확인하기</div>
+        </div>
+      </aside>
+    </div>
+    </div>
+
+    <section class="preview-grid">
+      <article class="mini">
+        <h3>로그인 / 가입</h3>
+        <p class="mini-note">이메일/비밀번호와 소셜 로그인을 함께 제공하되, 긴 설정 과정 없이 바로 진입합니다.</p>
+        <div class="login-wrap">
+          <div class="login-card">
+            <h3>Simple TODO</h3>
+            <p class="mini-note">오늘 할 일을 간단하게 정리하세요.</p>
+            <div class="login-field">이메일</div>
+            <div class="login-field">비밀번호</div>
+            <button class="primary">로그인</button>
+            <button>Google로 계속하기</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="mini">
+        <h3>오늘 할 일이 없을 때</h3>
+        <p class="mini-note">빈 화면에서 멈추지 않도록 빠른 입력과 템플릿을 더 눈에 띄게 제공합니다.</p>
+        <div class="empty-state">
+          <h3>오늘 할 일이 없습니다</h3>
+          <p class="mini-note">첫 할 일을 추가하거나 템플릿으로 시작해보세요.</p>
+          <div class="quick-add">
+            <span>+ 할 일 입력하기</span>
+            <span class="quick-chip">오늘</span>
+            <span class="quick-chip">보통</span>
+            <span class="quick-chip">추가</span>
+          </div>
+          <div class="templates">
+            <span class="badge">장보기 목록</span>
+            <span class="badge">공부 계획</span>
+            <span class="badge">업무 할 일</span>
+            <span class="badge">병원/예약 일정</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="mini">
+        <h3>검색 모달</h3>
+        <p class="mini-note">왼쪽 검색 버튼을 누르면 중앙에 할 일 검색과 최근 본 화면을 제공하는 모달을 띄웁니다.</p>
+        <div class="search-modal">
+          <div class="search-input">
+            <strong>⌕</strong>
+            <span>검색하거나 명령어를 입력하세요...</span>
+            <span class="key">Ctrl K</span>
+          </div>
+          <section class="command-section">
+            <p class="command-title">최근 본 화면</p>
+            <div class="command-row">□ 오늘 <span>최근</span></div>
+            <div class="command-row">□ 예정 <span>최근</span></div>
+          </section>
+          <section class="command-section">
+            <p class="command-title">할 일 검색 결과 예시</p>
+            <div class="command-row">병원 예약 확인하기 <span>오늘</span></div>
+            <div class="command-row">회의 자료 정리 <span>업무</span></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="mini">
+        <h3>캘린더 화면</h3>
+        <p class="mini-note">월간/주간 보기를 제공하고, 날짜가 있는 할 일만 표시합니다.</p>
+        <div class="calendar">
+          <div class="calendar-head">
+            <strong>2026년 5월</strong>
+            <div class="calendar-switch">
+              <button class="active">월간</button>
+              <button>주간</button>
+            </div>
+          </div>
+          <div class="calendar-grid">
+            <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day has-task">5<br>회의</div><div class="day">6</div><div class="day">7</div>
+            <div class="day">8</div><div class="day has-task">9<br>병원</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day has-task">13<br>마감</div><div class="day">14</div>
+            <div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div><div class="day">20</div><div class="day">21</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="mini">
+        <h3>보드 화면</h3>
+        <p class="mini-note">현재 선택된 필터 안에서 할 일 / 진행 중 / 완료 컬럼으로 표시합니다.</p>
+        <div class="board">
+          <div class="column">
+            <h4>할 일</h4>
+            <div class="board-card">병원 예약 확인</div>
+            <div class="board-card">자료 조사</div>
+          </div>
+          <div class="column">
+            <h4>진행 중</h4>
+            <div class="board-card">회의 자료 정리</div>
+          </div>
+          <div class="column">
+            <h4>완료</h4>
+            <div class="board-card">우유 사기</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="mini">
+        <h3>보관 화면</h3>
+        <p class="mini-note">완료와 휴지통을 하나의 보관 화면 안에서 탭으로 구분합니다.</p>
+        <div class="archive">
+          <div class="archive-tabs">
+            <button class="active">완료</button>
+            <button>휴지통</button>
+          </div>
+          <div class="archive-row"><span>어제 완료한 할 일</span><span class="meta">완료 취소</span></div>
+          <div class="archive-row"><span>지난주 정리한 문서</span><span class="meta">완료 취소</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
