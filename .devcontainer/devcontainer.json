@@ -21,7 +21,8 @@
     "vscode": {
       "extensions": [
         "openai.chatgpt",
-        "anthropic.claude-code"
+        "anthropic.claude-code",
+        "ritwickdey.liveserver"
       ]
     }
   }
