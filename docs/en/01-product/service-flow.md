@@ -4,35 +4,33 @@
 
 ```text
 1. User signs up or logs in.
-2. User creates a webhook endpoint.
-3. The service issues a public URL:
-   https://webhookdebugger.com/hooks/{uuid}
-4. User registers that URL in an external service.
-5. The external service sends an event to the debugger URL.
-6. The debugger stores the request.
-7. The browser receives a real-time notification.
-8. User inspects method, headers, body, IP address, and received time.
-9. User replays the saved request to a selected target URL.
-10. User checks the replay response status and result.
+2. The app opens the main task screen.
+3. If the user has tasks for today, the app shows today's task list.
+4. If the user has no tasks for today, the app shows a quick-capture empty
+   state.
+5. User adds a task through quick add or the detail panel.
+6. User optionally sets date, priority, list, tags, repeat, and memo.
+7. User reviews tasks in list, calendar, or board view.
+8. User completes tasks or moves them through board status columns.
+9. User searches or filters tasks when the list grows.
+10. User recovers completed or deleted tasks when needed.
 ```
 
-## Request Capture Flow
+## Task Creation Flow
 
 ```text
-External service
-  -> Public hook endpoint
-  -> Request persistence
-  -> Real-time WebSocket event
-  -> Request detail screen
+Quick-add input or detail panel
+  -> Task validation
+  -> Account-based task storage
+  -> Updated list/calendar/board view
 ```
 
-## Replay Flow
+## Completion And Trash Flow
 
 ```text
-Saved request
-  -> User enters target URL
-  -> Backend sends replay request
-  -> Backend records replay result
-  -> Browser displays status code and response summary
+Task
+  -> Complete or delete action
+  -> Same-day completed state or trash state
+  -> Undo, restore, or permanent delete
+  -> Updated default view
 ```
-

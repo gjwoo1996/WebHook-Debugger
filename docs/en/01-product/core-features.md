@@ -4,36 +4,43 @@
 
 - Email sign-up and login.
 - JWT-based access control.
-- Optional social login after the MVP is stable.
+- Social login as a fast entry option.
 
-## Endpoint Management
+## Task Creation And Editing
 
-- Generate webhook receiving URLs based on UUIDs.
-- Set endpoint names for easier identification.
-- Delete endpoints that are no longer needed.
-- Configure expiration time for temporary test endpoints.
+- Show a task list after login.
+- Add tasks through a one-line quick-add input.
+- Open a detail panel for richer task creation and editing.
+- Edit task title and memo.
+- Save changes explicitly from the detail panel.
+- Warn users before closing the detail panel with unsaved changes.
 
-## Request Capture and Visualization
+## Date, Priority, And Repeat
 
-- Accept common HTTP methods such as `GET`, `POST`, `PUT`, `PATCH`, and
-  `DELETE`.
-- Store request method, path, query string, headers, body, IP address, and
-  received time.
-- Display JSON bodies with readable formatting.
-- Show non-JSON bodies as raw text.
-- Notify the browser in real time through WebSocket.
+- Support no date, today, tomorrow, and direct date selection.
+- Support low, normal, and high priority.
+- Support simple repeat rules: daily, weekly, monthly, and yearly.
+- Keep natural-language date input outside the MVP.
 
-## Replay
+## Organization
 
-- Replay a saved request to a user-provided target URL.
-- Preserve the original body and selected headers.
-- Show replay status code and response summary.
-- Record replay attempts for debugging.
+- Organize tasks by lists.
+- Add tags as flexible context.
+- Keep tags available through detail and advanced options instead of making the
+  first screen busy.
 
-## History
+## Views
 
-- List received requests by endpoint.
-- View request details.
-- Filter by HTTP method and received date.
-- Search by basic metadata after the core history flow is stable.
+- List view for the default daily workflow.
+- Calendar view for dated tasks.
+- Board view for status-based task management.
+- Search modal for task title and memo search.
 
+## Completion And Trash
+
+- Mark tasks as complete.
+- Keep completed tasks dimmed in the same list on the day they are completed.
+- Move completed tasks out of the default list from the next day.
+- Allow users to undo completion.
+- Move deleted tasks to trash instead of deleting them immediately.
+- Allow restore and permanent deletion from trash.

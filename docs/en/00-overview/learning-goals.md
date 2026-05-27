@@ -4,23 +4,23 @@
 
 - Use Next.js App Router with a practical split between server and client
   components.
-- Build a real-time request viewer using a WebSocket client.
-- Manage server state with TanStack Query.
-- Render JSON bodies with readable formatting and syntax highlighting.
+- Manage task, list, tag, filter, and search state with TanStack Query.
+- Build task list, detail panel, modal, calendar, board, archive, and empty
+  state interfaces.
+- Implement accessible form controls for dates, priorities, tags, repeat rules,
+  and task status.
 - Create a shared API layer with Axios interceptors for authentication and error
   handling.
 
 ## Backend
 
-- Design a generic webhook receiver that can accept multiple HTTP methods.
-- Persist raw request data, including method, path, headers, body, IP address,
-  and received time.
-- Use Spring Security and JWT to protect user-specific endpoints and history.
-- Model endpoint and request relationships with JPA and PostgreSQL.
-- Implement filtered history search with method and date conditions.
-- Replay stored requests with WebClient while preserving important request data.
-- Publish real-time request events to the correct browser session with WebSocket
-  and STOMP.
+- Design user-specific task APIs protected by Spring Security and JWT.
+- Model tasks, lists, tags, repeat rules, completion, and trash states with JPA
+  and PostgreSQL.
+- Implement task search across titles and memos.
+- Implement filters for all, today, upcoming, completed, important, list, and
+  tag views.
+- Support reversible completion and trash recovery flows.
 
 ## Infrastructure and DevOps
 
@@ -34,7 +34,6 @@
 ## Collaboration
 
 - Practice issue-based development.
-- Use Swagger/OpenAPI as a shared contract between frontend and backend.
+- Use API documentation as a shared contract between frontend and backend.
 - Review pull requests before merging.
 - Break a full-stack product into small, testable tasks.
-

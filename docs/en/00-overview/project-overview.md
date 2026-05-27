@@ -2,15 +2,15 @@
 
 ## Summary
 
-WebHook Debugger is a developer tool for receiving webhook requests through a
-public URL, inspecting the request data in a browser, and replaying saved
-requests to a local or remote server.
+Simple TODO is a web-based task management app for quickly capturing tasks,
+organizing them with dates, lists, tags, and priorities, and reviewing them in
+list, calendar, and board views.
 
 ## Project Information
 
 | Item | Description |
 | --- | --- |
-| Project name | WebHook Debugger |
+| Project name | Simple TODO |
 | Duration | May 2026 to June 2026, approximately 1 month |
 | Team size | 2 people |
 | Repository style | Monorepo for frontend and backend |
@@ -19,19 +19,18 @@ requests to a local or remote server.
 
 ## Target Users
 
-- Developers integrating payment, login, messaging, CI/CD, or notification
-  webhooks.
-- Teams that need to inspect webhook payloads before building final handlers.
-- Learners who want to practice full-stack development with real HTTP,
-  real-time UI, persistence, authentication, and deployment.
+- People who want to capture personal tasks quickly without learning a complex
+  productivity system first.
+- Users who need light organization through dates, lists, tags, priorities, and
+  repeat rules.
+- Learners who want to practice full-stack development with authentication,
+  persistence, search, filters, rich UI states, and deployment.
 
 ## Problem Statement
 
-Webhook integration is difficult during local development because external
-services cannot call `localhost` on a developer machine. This causes a slow
-cycle of deploy, test, inspect, fix, and redeploy.
+Many TODO apps expose too many concepts too early. Users often need a place to
+write down today's tasks first, then add structure later only when it helps.
 
-WebHook Debugger reduces that cycle by providing a public receiving endpoint,
-storing each request, showing the request in real time, and allowing the same
-request to be replayed.
-
+Simple TODO reduces that friction by making the main task flow simple: capture a
+task, decide when it matters, organize it only as needed, and recover safely
+from completion or deletion mistakes.
