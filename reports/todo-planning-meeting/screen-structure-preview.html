@@ -361,6 +361,19 @@
       font-size: 14px;
     }
 
+    .field .select-value {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .select-value span:last-child {
+      color: #8490a0;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
     .choice-row {
       display: flex;
       flex-wrap: wrap;
@@ -767,7 +780,10 @@
         </div>
         <div class="field">
           <label>반복</label>
-          <div>반복 안 함</div>
+          <div class="select-value">
+            <span>반복 안 함</span>
+            <span>▾</span>
+          </div>
         </div>
         <div class="field">
           <label>메모</label>
