@@ -3,6 +3,9 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
+  "containerEnv": {
+    "GH_CONFIG_DIR": "/home/vscode/.config/gh"
+  },
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "lts"
@@ -11,6 +14,7 @@
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
   },
   "mounts": [
+    "source=webhook-debugger-gh,target=/home/vscode/.config/gh,type=volume",
     "source=webhook-debugger-codex-${devcontainerId},target=/home/vscode/.codex,type=volume",
     "source=webhook-debugger-claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
     "source=webhook-debugger-claude-state-${devcontainerId},target=/home/vscode/.claude-state,type=volume"
