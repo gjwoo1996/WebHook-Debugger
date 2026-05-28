@@ -1,0 +1,43 @@
+# Web
+📦frontend
+ ┣ 📂.gemini
+ ┃ ┣ 📜GEMINI.md
+ ┃ ┣ 📜folder.tree
+ ┃ ┣ 📜requirement.md
+ ┃ ┗ 📜settings.json
+ ┣ 📂app
+ ┃ ┣ 📂(default-layout)
+ ┃ ┃ ┗ 📂(web)
+ ┃ ┃ ┃ ┣ 📜layout.tsx
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📜layout.tsx
+ ┃ ┗ 📜provider.tsx
+ ┣ 📂components
+ ┃ ┣ 📂layout
+ ┃ ┃ ┗ 📜header.tsx
+ ┃ ┗ 📂ui
+ ┣ 📂features
+ ┃ ┣ 📂todo
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┃ ┣ 📜main-content.tsx
+ ┃ ┃ ┃ ┣ 📜task-detail.tsx
+ ┃ ┃ ┃ ┗ 📜web-sidebar.tsx
+ ┃ ┃ ┗ 📂context
+ ┃ ┃ ┃ ┗ 📜todo-context.tsx
+ ┣ 📂hooks
+ ┃ ┗ 📜use-mobile.ts
+ ┣ 📂mock
+ ┃ ┣ 📂images
+ ┃ ┗ 📜implementation.md
+ ┣ 📂public
+ ┣ 📂shared
+ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜theme-provider.tsx
+ ┃ ┣ 📂lib
+ ┃ ┃ ┣ 📂axios
+ ┃ ┃ ┣ 📜react-query.ts
+ ┃ ┃ ┗ 📜utils.ts
+ ┃ ┣ 📂styles
+ ┃ ┃ ┗ 📜globals.css
+ ┃ ┗ 📂types
+ ┃ ┃ ┗ 📜env.d.ts

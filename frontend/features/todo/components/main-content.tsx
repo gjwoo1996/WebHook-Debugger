@@ -41,6 +41,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import { useTodoLists } from '@/features/todo/hooks/todo.hooks'
+
 const tasks = [
   {
     id: 4,
@@ -76,6 +78,8 @@ export function MainContent() {
   const [isAddingTask, setIsAddingTask] = useState(false)
   const addTaskRef = useRef<HTMLDivElement>(null)
   const { state, toggleSidebar } = useSidebar()
+
+  // const { data } = useTodoLists()
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

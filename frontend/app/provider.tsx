@@ -6,8 +6,9 @@ import {
   QueryClientProvider,
   environmentManager,
 } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { makeQueryClient } from '@/shared/lib/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 
 let browserQueryClient: QueryClient | undefined = undefined
 
@@ -37,7 +38,7 @@ export default function AppProvider({
     <>
       <QueryClientProvider client={queryClient}>
         {process.env.DEV && <ReactQueryDevtools />}
-        {children}
+        <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
       </QueryClientProvider>
     </>
   )
