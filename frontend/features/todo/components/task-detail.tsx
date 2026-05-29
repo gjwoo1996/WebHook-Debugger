@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   Star,
   Plus,
@@ -14,6 +15,13 @@ import {
   Circle,
   ChevronRight,
 } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { TodoDropdown } from '@/features/todo/components/todo-dropdown'
+import {
+  deadlineOptions,
+  reminderOptions,
+  repeatOptions,
+} from '@/features/todo/types/main-content-options'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
 
@@ -23,6 +31,10 @@ interface TaskDetailProps {
 }
 
 export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
+  const [isAddingTask, setIsAddingTask] = useState(false)
+
+  // TODO: 1. data 를 list 로부터 props drilling? | 2. id 로 data 조회
+
   // In a real app, we would fetch task details based on taskId
   const taskTitle =
     taskId === 2 ? '테스트2' : taskId === 4 ? '테스트4' : '테스트1'
@@ -37,25 +49,48 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
         <div className="mb-2 rounded-sm border bg-white p-4 shadow-sm">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-1 items-start gap-3">
-              <Circle className="mt-1 h-5 w-5 cursor-pointer text-gray-400 hover:text-[#2564cf]" />
+              <Circle className="h-5 w-5 cursor-pointer text-gray-400 hover:text-[#2564cf]" />
               <div className="flex w-full flex-col gap-1">
-                <h2 className="text-xl leading-tight font-bold">{taskTitle}</h2>
-                <div className="group flex items-center gap-2 text-sm text-gray-500">
+                <h2 className="text-md leading-tight font-bold">{taskTitle}</h2>
+                {/* <div className="group flex items-center gap-2 text-sm text-gray-500">
                   <Circle className="h-3.5 w-3.5" />
                   <span className="flex-1">테스트2-1</span>
                   <button className="rounded p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-100">
                     <X className="h-3 w-3" />
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
-            <Star className="mt-1 h-5 w-5 cursor-pointer text-gray-400 hover:text-yellow-500" />
+            <Star className="h-5 w-5 cursor-pointer text-gray-400 hover:text-yellow-500" />
           </div>
 
-          <button className="mt-4 flex items-center gap-3 px-1 text-sm text-[#2564cf] hover:underline">
-            <Plus className="h-4 w-4" />
-            <span>다음 단계</span>
-          </button>
+          <div className="mt-4 text-sm text-gray-500">
+            {taskId === 2 ? (
+              <div className="group flex items-center gap-2">
+                <Circle className="h-5 w-5 cursor-pointer text-gray-400 hover:text-[#2564cf]" />
+                <Input
+                  className="h-auto border-none bg-transparent p-1 text-sm focus-visible:ring-0"
+                  placeholder={'테스트2-1'}
+                />
+                <button>
+                  <X className="h-5 w-5 cursor-pointer text-gray-400 hover:text-red-500" />
+                </button>
+              </div>
+            ) : (
+              <div className="group flex items-center gap-2">
+                {isAddingTask ? (
+                  <Circle className="h-5 w-5 shrink-2 cursor-pointer text-gray-400 hover:text-[#2564cf]" />
+                ) : (
+                  <Plus className="h-5 w-5 shrink-2 text-[#2564cf]" />
+                )}
+                <Input
+                  className="h-auto border-none bg-transparent p-1 text-sm placeholder:text-[#2564cf] hover:text-gray-400 focus-visible:ring-0"
+                  placeholder={'단계 추가'}
+                  onFocus={() => setIsAddingTask(true)}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Action Group 1 */}
@@ -71,21 +106,48 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
 
         {/* Action Group 2 */}
         <div className="mb-2 space-y-px overflow-hidden rounded-sm border bg-white text-gray-600 shadow-sm">
-          <button className="flex w-full items-center gap-4 border-b px-4 py-3 text-sm hover:bg-gray-50">
-            <Bell className="h-5 w-5" />
-            <span>미리 알림</span>
-          </button>
-          <button className="flex w-full items-center justify-between border-b px-4 py-3 text-sm text-[#2564cf] hover:bg-gray-50">
-            <div className="flex items-center gap-4">
-              <Calendar className="h-5 w-5" />
-              <span>오늘까지</span>
-            </div>
-            <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-          </button>
-          <button className="flex w-full items-center gap-4 px-4 py-3 text-sm hover:bg-gray-50">
-            <Repeat className="h-5 w-5" />
-            <span>반복</span>
-          </button>
+          <TodoDropdown
+            trigger={
+              <button className="flex w-full items-center gap-4 border-b px-4 py-3 text-sm hover:bg-gray-50">
+                <Bell className="h-5 w-5" />
+                <span>미리 알림</span>
+              </button>
+            }
+            title="미리 알림"
+            items={reminderOptions}
+          />
+
+          <TodoDropdown
+            trigger={
+              taskId === 2 ? (
+                <button className="flex w-full items-center gap-4 border-b px-4 py-3 text-sm hover:bg-gray-50">
+                  <Calendar className="h-5 w-5" />
+                  <span>기한 설정</span>
+                </button>
+              ) : (
+                <button className="flex w-full items-center justify-between border-b px-4 py-3 text-sm text-[#2564cf] hover:bg-gray-50">
+                  <div className="flex items-center gap-4">
+                    <Calendar className="h-5 w-5" />
+                    <span>오늘까지</span>
+                  </div>
+                  <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                </button>
+              )
+            }
+            title="기한"
+            items={deadlineOptions}
+          />
+
+          <TodoDropdown
+            trigger={
+              <button className="flex w-full items-center gap-4 px-4 py-3 text-sm hover:bg-gray-50">
+                <Repeat className="h-5 w-5" />
+                <span>반복</span>
+              </button>
+            }
+            title="반복"
+            items={repeatOptions}
+          />
         </div>
 
         {/* Attachments */}
